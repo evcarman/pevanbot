@@ -1,35 +1,35 @@
 /*************************************************
-*
-* TwitchBot
-* Evan Carman
-* 2016
-*
-**************************************************/
+ *
+ * PevanBot
+ * Evan Carman
+ * 2016
+ *
+ **************************************************/
 var pjson = require('./package.json');
 var tmi = require('tmi.js');
+// make your own oauth.js file to contain the password and bot name
+// make sure github does not see that file, to keep it hidden
 var oauth = require('./oauth.js');
 var twitchApi = require("node-twitchtv");
 
-    var options = {
-        options: {
-            debug: true
-        },
-        connection: {
-            reconnect: true
-        },
-        identity: {
-            // make your own oauth.js file to contain the password and bot name
-            // make sure github does not see that file, to keep it hidden
-            username: oauth.username,
-            password: oauth.password
-        },
-        channels: ['#pevan95', '#g3btv']
+var options = {
+    options: {
+        debug: true
+    },
+    connection: {
+        reconnect: true
+    },
+    identity: {
+        username: oauth.username,
+        password: oauth.token
+    },
+    channels: ['#pevan95', '#g3btv']
 
-    };
+};
 
-    var client = tmi.client(options);
+var tmiClient = tmi.client(options);
 
-client.connect();
+tmiClient.connect();
 
 // regular expression to check for links (thanks Dad)
 var regLink = /[A-Za-z0-9]\.[A-Za-z0-9]/;
@@ -39,7 +39,7 @@ var regLink = /[A-Za-z0-9]\.[A-Za-z0-9]/;
  *  chat commands
  *
  ******************************************/
-client.on("chat", (channel, user, message, self) => {
+tmiClient.on("chat", (channel, user, message, self) => {
     // doesn't respond to itself
     if (self) return;
 
@@ -48,41 +48,55 @@ client.on("chat", (channel, user, message, self) => {
      *  times out user if they are not a mod
      */
     if (message.match(regLink) && !user.mod) {
-        client.timeout(channel, user.username, 10, "posted a link");
-        client.say(channel, "KAPOW Stop posting links!");
+        tmiClient.timeout(channel, user.username, 10, "posted a link");
+        tmiClient.say(channel, "KAPOW Stop posting links!");
     }
 
     /******************************************
      *  generic commands used on any channel
      ******************************************/
 
-     /* !bot
+    /* !bot
      *  returns version number
      */
-     if (message == "!bot") {
-       client.say(channel, "Currently running PevanBot v" + pjson.version);
-     }
+    if (message == "!bot") {
+        tmiClient.say(channel, "Currently running PevanBot v" + pjson.version);
+    }
 
     /* !commands
      * returns link to list of commands
      */
     if (message == "!commands") {
-        client.say(channel, "Beep Boop MrDestructoid A list of commands can be found here: https://goo.gl/0C9zxp");
+        tmiClient.say(channel, "Beep Boop MrDestructoid A list of commands can be found here: https://goo.gl/0C9zxp");
+    }
+
+    /* !dev
+    * provides a link to the trello board for this project
+    */
+    if (message == "!dev") {
+        tmiClient.say(channel, "Progress on the development of PevanBot can be found here: https://trello.com/b/aae08Hkc");
     }
 
     /* !awesome
      * says the user who called the command is awesome
      */
     if (message == "!awesome") {
-        client.say(channel, user.username + " is awesome! CoolCat");
+        tmiClient.say(channel, user.username + " is awesome! CoolCat");
+    }
+
+    /* !crash
+     * warns the streamer that there is a black screen or something is wrong
+     */
+    if (message == "!crash") {
+        tmiClient.say(channel, "cmonBruh Something seems to be wrong with the stream " + channel.substr(1) );
     }
 
     //TODO
     /* !pun
-    * random pun is picked from a list
-    */
+     * random pun is picked from a list
+     */
     if (message == "!pun") {
-        client.say(channel, "WIP SeemsGood");
+        tmiClient.say(channel, "WIP SeemsGood");
     }
 
     //TODO
@@ -95,32 +109,41 @@ client.on("chat", (channel, user, message, self) => {
 
         // ?? derp
 
-        client.say(channel, chan + " has been live for ##");
+        tmiClient.say(channel, chan + " has been live for ##");
     }
 
     //TODO !game
     if (message == "!game") {
-        client.say(channel, "WIP SeemsGood");
+// var apiClient = twitchApi({client_id: oauth.username, password: oauth.password });
+//
+//       console.log(apiClient);
+//
+//         apiClient.stream({
+//             channel: channel.substr(1)
+//         }, function(err, response) {
+//             console.log(channel.info); // channel info/description
+//         });
+        tmiClient.say(channel, "WIP SeemsGood");
     }
 
     /******************************************
      *  channel specific commands
      ******************************************/
-    if (channel == "#pevan95") {
+    // if (channel == "#pevan95") {
         /* !specs
          * returns link to my build on pcpartpicker
          */
         if (message == "!specs") {
-            client.say(channel, "My build can be found here: http://pcpartpicker.com/list/BbPCQ7");
+            tmiClient.say(channel, "My build can be found here: http://pcpartpicker.com/list/BbPCQ7");
         }
 
         /*!pevan
          * shows the correct way to pronounce my name :P
          */
         if (message == "!pevan") {
-            client.say(channel, "not PEEvan PJSalt");
+            tmiClient.say(channel, "not PEEvan PJSalt");
         }
-    }
+    // }
 });
 
 //TODO on connect start timer to push notifications
@@ -128,10 +151,11 @@ client.on("chat", (channel, user, message, self) => {
 /******************************************
  *
  *  host message
+ *  TODO currently doesn't respod
  *
  ******************************************/
-client.on("hosted", (channel, user, viewers) => {
-  client.say(channel, "Host hype! Thank you " + user);
+tmiClient.on("hosted", (channel, user, viewers) => {
+    tmiClient.say(channel, "Host hype! Thank you " + user);
 });
 
 
