@@ -11,6 +11,17 @@ var tmi = require('tmi.js');
 // make sure github does not see that file, to keep it hidden
 var oauth = require('./oauth.js');
 var twitchApi = require("node-twitchtv");
+var puns = [];
+
+// reads list of puns from the text file on starting the bot
+// stores them in an array to easily access later
+var lineReader = require('readline').createInterface({
+  input: require('fs').createReadStream('puns.txt')
+});
+lineReader.on('line', function (line) {
+  puns.push(line);
+});
+
 
 var options = {
     options: {
@@ -67,7 +78,7 @@ tmiClient.on("chat", (channel, user, message, self) => {
      * returns link to list of commands
      */
     if (message == "!commands") {
-        tmiClient.say(channel, "Beep Boop MrDestructoid A list of commands can be found here: https://goo.gl/0C9zxp");
+        tmiClient.say(channel, "Beep Boop MrDestructoid " + user.username + " a list of commands can be found here: https://goo.gl/0C9zxp");
     }
 
     /* !dev
@@ -96,7 +107,11 @@ tmiClient.on("chat", (channel, user, message, self) => {
      * random pun is picked from a list
      */
     if (message == "!pun") {
-        tmiClient.say(channel, "WIP SeemsGood");
+      var max = puns.length - 1;
+
+
+        var r = Math.floor(Math.random() * puns.length);
+        tmiClient.say(channel, puns[r] + " Jebaited" );
     }
 
     //TODO
