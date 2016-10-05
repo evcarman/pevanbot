@@ -102,14 +102,11 @@ tmiClient.on("chat", (channel, user, message, self) => {
         tmiClient.say(channel, "cmonBruh Something seems to be wrong with the stream " + channel.substr(1) );
     }
 
-    //TODO
     /* !pun
      * random pun is picked from a list
      */
     if (message == "!pun") {
-      var max = puns.length - 1;
-
-
+      // generate randome index to pick from pun array
         var r = Math.floor(Math.random() * puns.length);
         tmiClient.say(channel, puns[r] + " Jebaited" );
     }
