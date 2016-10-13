@@ -12,6 +12,9 @@ var tmi = require('tmi.js');
 var oauth = require('./oauth.js');
 var twitchApi = require("node-twitchtv");
 var puns = [];
+// timer delays in minutes
+var bttvDelay = 30;
+var followDelay = 20;
 
 // reads list of puns from the text file on starting the bot
 // stores them in an array to easily access later
@@ -58,7 +61,7 @@ tmiClient.on("chat", (channel, user, message, self) => {
      *  checks if message sent contains a link
      *  times out user if they are not a mod
      */
-    if (message.match(regLink) && !user.mod) {
+    if (channel == "#pevan95" && message.match(regLink) && !user.mod) {
         tmiClient.timeout(channel, user.username, 10, "posted a link");
         tmiClient.say(channel, "KAPOW Stop posting links!");
     }
@@ -158,7 +161,21 @@ tmiClient.on("chat", (channel, user, message, self) => {
     // }
 });
 
-//TODO on connect start timer to push notifications
+// timer to let people know about BetterTwitchTV
+setInterval(
+  function () {
+    tmiClient.say("#pevan95", "Want to improve your Twitch experience with new features, emotes, and more?  Check out BetterTwitchTV http://nightdev.com/betterttv/")
+  },
+  // converting minutes to milliseconds
+  (bttvDelay * 60000) )
+
+// timer to remind people to follow
+  setInterval(
+    function () {
+      tmiClient.say("#pevan95", "Enjoying this content?  Follow to keep up to date when I'm live Poooound")
+    },
+    // converting minutes to milliseconds
+    (followDelay * 60000) )
 
 /******************************************
  *
