@@ -81,7 +81,7 @@ tmiClient.on("chat", (channel, user, message, self) => {
      * returns link to list of commands
      */
     if (message == "!commands") {
-        tmiClient.say(channel, "Beep Boop MrDestructoid " + user.username + " a list of commands can be found here: https://goo.gl/0C9zxp");
+        tmiClient.say(channel, "Beep Boop MrDestructoid " + user.username + " -> a list of commands can be found here: https://goo.gl/0C9zxp");
     }
 
     /* !dev
@@ -89,6 +89,13 @@ tmiClient.on("chat", (channel, user, message, self) => {
     */
     if (message == "!dev") {
         tmiClient.say(channel, "Progress on the development of PevanBot can be found here: https://trello.com/b/aae08Hkc");
+    }
+
+    /* !discord
+    * provides a link to the G3btv discord
+    */
+    if (message == "!discord") {
+      tmiClient.say(channel, "Come join the community on discord: https://discord.gg/epKsExj")
     }
 
     /* !awesome
