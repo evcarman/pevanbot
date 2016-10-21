@@ -13,8 +13,8 @@ var oauth = require('./oauth.js');
 var twitchApi = require("node-twitchtv");
 var puns = [];
 // timer delays in minutes
-var bttvDelay = 30;
-var followDelay = 20;
+var bttvDelay = 45;
+var followDelay = 30;
 
 // reads list of puns from the text file on starting the bot
 // stores them in an array to easily access later
@@ -126,26 +126,38 @@ tmiClient.on("chat", (channel, user, message, self) => {
      * returns the total time the channel has been live
      */
     if (message == "!uptime") {
-
         var chan = channel.substr(1);
 
-        // ?? derp
-
-        tmiClient.say(channel, chan + " has been live for ##");
+        // call twitchGetStream
+      /*
+      var sData = api_handle.twitchGetStream(chan)
+      
+      if (!sData) {
+        tmiClient.say(channel, chan + " is not currently live.");
+      } else {
+        var uptime = sData.stream.created_at - current_time;
+        tmiClient.say(channel, chan + " has been live for " + uptime);
+      };
+      */
+         tmiClient.say(channel, "panicBasket");
     }
 
     //TODO !game
     if (message == "!game") {
-// var apiClient = twitchApi({client_id: oauth.username, password: oauth.password });
-//
-//       console.log(apiClient);
-//
-//         apiClient.stream({
-//             channel: channel.substr(1)
-//         }, function(err, response) {
-//             console.log(channel.info); // channel info/description
-//         });
-        tmiClient.say(channel, "WIP SeemsGood");
+      var chan = channel.substr(1);
+
+        // call twitchGetStream
+      /*
+      var sData = api_handle.twitchGetStream(chan)
+      
+      if (!sData) {
+        tmiClient.say(channel, chan + " is not currently live.");
+      } else {
+        var game = sData.stream.game;
+        tmiClient.say(channel, "The current game is " + sData.stream.game);
+      };
+      */
+         tmiClient.say(channel, "panicBasket");
     }
 
     /******************************************
