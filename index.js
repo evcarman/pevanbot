@@ -14,6 +14,7 @@ var pjson = require('./package.json');
 var request = require('request');
 var twitchApi = require("node-twitchtv");
 var tmi = require('tmi.js');
+var moment = require ('moment');
 
 // make your own oauth.js file to contain the password and bot name
 // make sure github does not see that file, to keep it hidden
@@ -149,23 +150,31 @@ tmiClient.on("chat", (channel, user, message, self) => {
      * returns the total time the channel has been live
      */
     if (command === "!uptime") {
-      kraken({
-          url: 'streams/' + chan
-      }, (err, res, body) => {
-        // handles error from http request
-          if (err || res.statusCode !== 200) {
-              console.log('Error: ' + err.message);
-              return tmiClient.say(channel, "Something went wrong panicBasket");
-          }
+        kraken({
+            url: 'streams/' + chan
+        }, (err, res, body) => {
+            // handles error from http request
+            if (err || res.statusCode !== 200) {
+                console.log('Error: ' + err.message);
+                return tmiClient.say(channel, "Something went wrong panicBasket");
+            }
 
-          if (!body.stream) {
-              return tmiClient.say(channel, "This channel is not currently live");
-          } else {
-            var created = body.stream.created_at;
-            var uptime = 0;
-              return tmiClient.say(channel, "This stream has been up for " + created);
-          }
-      });
+            if (!body.stream) {
+                return tmiClient.say(channel, "This channel is not currently live");
+            } else {
+                var created = moment(body.stream.created_at);
+                var now = moment()
+                var uptime = now.subtract(created);
+
+                console.log('from JSON: ' + body.stream.created_at);
+                console.log('created moment: ' + created);
+                console.log('now: ' + now);
+                console.log('uptime: ' + uptime)
+                console.log('formated: ' + uptime.days() + ' ' + uptime.hours() + ' ' + uptime.minutes() );
+
+                //return tmiClient.say(channel, chan + " has been live for " + uptime.hours() + ' hours and ' + uptime.minutes() + ' minutes');
+            }
+        });
     }
 
     /* !game
@@ -176,7 +185,7 @@ tmiClient.on("chat", (channel, user, message, self) => {
         kraken({
             url: 'streams/' + chan
         }, (err, res, body) => {
-          // handles error from http request
+            // handles error from http request
             if (err || res.statusCode !== 200) {
                 console.log('Error: ' + err.message);
                 return tmiClient.say(channel, "Something went wrong panicBasket");
