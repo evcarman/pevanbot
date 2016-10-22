@@ -1,14 +1,14 @@
 var http = require("http");
 
 function getStream (channel) {
-	var url = "http://api.twitch.com/kraken/streams/" + channel;
-	/*
-	headers: {
-		'Client-ID': 'rjtftra8olb8jes1r8vvp05p58wbsku'
+	var options = {
+		url : "http://api.twitch.com/kraken/streams/" + channel,
+		headers: {
+			'Client-ID': 'rjtftra8olb8jes1r8vvp05p58wbsku'
+		} 
 	}
-	*/
 
-	var request = http.get(url, function (response) {
+	var request = http.get(options, function (response) {
 		// data is streamed in chunks from the server
     		// so we have to handle the "data" event    
     		var buffer = "";
