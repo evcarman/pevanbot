@@ -96,7 +96,7 @@ tmiClient.on("chat", (channel, user, message, self) => {
     /* !bot
      *  returns version number
      */
-    if (command === "!!bot") {
+    if (command === "!bot") {
         tmiClient.say(channel, "Currently running PevanBot v" + pjson.version);
     }
 
@@ -149,25 +149,32 @@ tmiClient.on("chat", (channel, user, message, self) => {
      * returns the total time the channel has been live
      */
     if (command === "!uptime") {
-        // call twitchGetStream
-        /*
-        var sData = api_handle.twitchGetStream(chan)
+      kraken({
+          url: 'streams/' + chan
+      }, (err, res, body) => {
+        // handles error from http request
+          if (err || res.statusCode !== 200) {
+              console.log('Error: ' + err.message);
+              return tmiClient.say(channel, "Something went wrong panicBasket");
+          }
 
-        if (!sData) {
-          tmiClient.say(channel, chan + " is not currently live.");
-        } else {
-          var uptime = sData.stream.created_at - current_time;
-          tmiClient.say(channel, chan + " has been live for " + uptime);
-        };
-        */
-        tmiClient.say(channel, "panicBasket");
+          if (!body.stream) {
+              return tmiClient.say(channel, "This channel is not currently live");
+          } else {
+            var created = body.stream.created_at;
+            var uptime = 0;
+              return tmiClient.say(channel, "This stream has been up for " + created);
+          }
+      });
     }
 
-    //TODO !game
+    /* !game
+     * uses twitch kraken api to get the game object from the curret stream
+     */
     if (command === "!game") {
 
         kraken({
-            url: 'channels/' + chan
+            url: 'streams/' + chan
         }, (err, res, body) => {
           // handles error from http request
             if (err || res.statusCode !== 200) {
@@ -175,11 +182,10 @@ tmiClient.on("chat", (channel, user, message, self) => {
                 return tmiClient.say(channel, "Something went wrong panicBasket");
             }
 
-            var game = body.game;
-            if (!game) {
+            if (!body.stream) {
                 return tmiClient.say(channel, "This channel is not currently live");
             } else {
-                return tmiClient.say(channel, "The current game is " + game);
+                return tmiClient.say(channel, "The current game is " + body.stream.game);
             }
         });
     }
