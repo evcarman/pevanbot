@@ -40,7 +40,7 @@ var kraken = request.defaults({
     baseUrl: 'https://api.twitch.tv/kraken/',
     headers: {
         'Accept': 'application/vnd.twitchtv.v3+json',
-        'Client-ID': 'rjtftra8olb8jes1r8vvp05p58wbsku'
+        'Client-ID': '${oauth.clientID}'
     },
     json: true
 })
