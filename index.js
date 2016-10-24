@@ -153,7 +153,7 @@ tmiClient.on("chat", (channel, user, message, self) => {
             if (!body.stream) {
                 return tmiClient.say(channel, "This channel is not currently live");
             } else {
-                var created = moment(body.stream.created_at);
+                var created = moment(body.stream.created_at, 'YYYY-MM-DDTHH:mm:ssZ');
                 var now = moment()
                 var uptime = now.subtract(created);
 
