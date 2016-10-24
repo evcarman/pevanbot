@@ -81,15 +81,6 @@ tmiClient.on("chat", (channel, user, message, self) => {
     var params = message.split(' ');
     var command = params.shift().toLowerCase();
 
-    /*  link filter
-     *  checks if message sent contains a link
-     *  times out user if they are not a mod
-     */
-    if (channel == "#pevan95" && message.match(regLink) && !user.mod) {
-        tmiClient.timeout(channel, user.username, 10, "posted a link");
-        tmiClient.say(channel, "KAPOW Stop posting links!");
-    }
-
     /******************************************
      *  generic commands used on any channel
      ******************************************/
@@ -202,21 +193,30 @@ tmiClient.on("chat", (channel, user, message, self) => {
     /******************************************
      *  channel specific commands
      ******************************************/
-    // if (channel == "#pevan95") {
+    if (chan === "pevan95") {
     /* !specs
      * returns link to my build on pcpartpicker
      */
-    if (command === "!specs") {
-        tmiClient.say(channel, "My build can be found here: http://pcpartpicker.com/list/BbPCQ7");
-    }
+        if (command === "!specs") {
+            tmiClient.say(channel, "My build can be found here: http://pcpartpicker.com/list/BbPCQ7");
+        }
 
-    /*!pevan
-     * shows the correct way to pronounce my name :P
-     */
-    if (command === "!pevan") {
-        tmiClient.say(channel, "not PEEvan PJSalt");
+        /*!pevan
+         * shows the correct way to pronounce my name :P
+         */
+        if (command === "!pevan") {
+            tmiClient.say(channel, "not PEEvan PJSalt");
+        }
+
+            /*  link filter
+         *  checks if message sent contains a link
+         *  times out user if they are not a mod
+         */
+        if (message.match(regLink) && !user.mod) {
+            tmiClient.timeout(channel, user.username, 10, "posted a link");
+            tmiClient.say(channel, "KAPOW Stop posting links!");
+        }
     }
-    // }
 });
 
 // timer to let people know about BetterTwitchTV
