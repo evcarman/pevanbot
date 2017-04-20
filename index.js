@@ -56,7 +56,7 @@ var tmiOptions = {
         username: oauth.username,
         password: oauth.token
     },
-    channels: ['#pevan95', '#g3btv']
+    channels: ['#pevan95']
 
 };
 
@@ -150,31 +150,31 @@ tmiClient.on("chat", (channel, user, message, self) => {
      * returns the total time the channel has been live
      */
     if (command === "!uptime") {
-        kraken({
-            url: 'streams/' + chan
-        }, (err, res, body) => {
-            // handles error from http request
-            if (err || res.statusCode !== 200) {
-                console.log('Error: ' + err.message);
-                return tmiClient.say(channel, "Something went wrong panicBasket");
-            }
+         kraken({
+             url: 'streams/' + chan
+         }, (err, res, body) => {
+             // handles error from http request
+             if (err || res.statusCode !== 200) {
+                 console.log('Error: ' + err.message);
+                 return tmiClient.say(channel, "Something went wrong panicBasket");
+             }
 
-            if (!body.stream) {
-                return tmiClient.say(channel, "This channel is not currently live");
-            } else {
-                var created = moment(body.stream.created_at);
-                var now = moment()
-                var uptime = now.subtract(created);
+             if (!body.stream) {
+                 return tmiClient.say(channel, "This channel is not currently live");
+             } else {
+                 var now = moment()
+                 var start = moment(body.stream.created_at, "YYYY-MM-DD HH:mm:ss Z")
 
-                console.log('from JSON: ' + body.stream.created_at);
-                console.log('created moment: ' + created);
-                console.log('now: ' + now);
-                console.log('uptime: ' + uptime)
-                console.log('formated: ' + uptime.days() + ' ' + uptime.hours() + ' ' + uptime.minutes() );
+                //  console.log('from JSON: ' + body.stream.created_at);
+                //  console.log('start: ' + start);
+                //  console.log('start formated: ' + start.hours() + ' ' + start.minutes() + ' ' + start.seconds());
+                //  console.log('now: ' + now);
+                //  console.log('now formated: ' + now.hours() + ' ' + now.minutes() + ' ' + now.seconds());
 
-                //return tmiClient.say(channel, chan + " has been live for " + uptime.hours() + ' hours and ' + uptime.minutes() + ' minutes');
-            }
-        });
+                 return tmiClient.say(channel, chan + ' has been live for ' + now.diff(start, 'minutes') + ' minutes');
+             }
+         });
+        //tmiClient.say(channel, 'Work in progress panicBasket');
     }
 
     /* !game
