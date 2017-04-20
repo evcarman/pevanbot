@@ -145,7 +145,6 @@ tmiClient.on("chat", (channel, user, message, self) => {
         tmiClient.say(channel, puns[r] + " Jebaited");
     }
 
-    //TODO
     /* !uptime
      * returns the total time the channel has been live
      */
@@ -174,7 +173,6 @@ tmiClient.on("chat", (channel, user, message, self) => {
                  return tmiClient.say(channel, chan + ' has been live for ' + now.diff(start, 'minutes') + ' minutes');
              }
          });
-        //tmiClient.say(channel, 'Work in progress panicBasket');
     }
 
     /* !game
