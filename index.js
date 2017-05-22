@@ -87,7 +87,7 @@ tmiClient.on("chat", (channel, user, message, self) => {
      */
     if (channel == "#pevan95" && message.match(regLink) && !user.mod) {
         tmiClient.timeout(channel, user.username, 10, "posted a link");
-        tmiClient.say(channel, "KAPOW Stop posting links!");
+        tmiClient.say(channel, "PunOko Stop posting links!");
     }
 
     /******************************************
@@ -119,7 +119,14 @@ tmiClient.on("chat", (channel, user, message, self) => {
      * provides a link to the G3btv discord
      */
     if (command === "!discord") {
-        tmiClient.say(channel, "Come join the community on discord: https://discord.gg/epKsExj")
+        tmiClient.say(channel, "Come join the community on discord: https://discord.gg/VBkUMxV")
+    }
+
+    /* !music
+    * link to the usual music
+    */
+    if (command === "!music") {
+        tmiClient.say(channel, "GivePLZ Most of the time I'm listening to this https://goo.gl/fpYNM9")
     }
 
     /* !awesome
